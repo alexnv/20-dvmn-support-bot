@@ -31,13 +31,37 @@ def help_command(update: Update, context: CallbackContext) -> None:
 
 def echo(update: Update, context: CallbackContext) -> None:
     """Echo the user message."""
-    update.message.reply_text(update.message.text)
+    flowresponse = detect_intent_texts(update.message.text)
+    update.message.reply_text(flowresponse)
+
+
+def detect_intent_texts(text, language_code="ru"):
+    """Returns the result of detect intent with texts as inputs.
+
+    Using the same `session_id` between requests allows continuation
+    of the conversation."""
+    from google.cloud import dialogflow
+
+    session_client = dialogflow.SessionsClient()
+
+    session = session_client.session_path(os.environ["PROJECT_ID"], os.environ["PROJECT_ID"])
+
+    text_input = dialogflow.TextInput(text=text, language_code=language_code)
+
+    query_input = dialogflow.QueryInput(text=text_input)
+
+    response = session_client.detect_intent(
+        request={"session": session, "query_input": query_input}
+    )
+
+    return response.query_result.fulfillment_text
 
 
 def main() -> None:
     load_dotenv()
     telegram_token = os.environ["TELEGRAM_TOKEN"]
-
+    dialogflow_project_id = os.environ["PROJECT_ID"]
+    project_id = os.environ["PROJECT_ID"]
     """Start the bot."""
     # Create the Updater and pass it your bot's token.
     updater = Updater(telegram_token)
