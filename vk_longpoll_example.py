@@ -5,6 +5,7 @@ import vk_api as vk
 from dotenv import load_dotenv
 from vk_api.longpoll import VkLongPoll, VkEventType
 
+
 def detect_intent_texts(text, language_code="ru"):
     """Returns the result of detect intent with texts as inputs.
 
@@ -24,16 +25,17 @@ def detect_intent_texts(text, language_code="ru"):
         request={"session": session, "query_input": query_input}
     )
 
-    return response.query_result.fulfillment_text
+    return "" if response.query_result.intent.is_fallback else response.query_result.fulfillment_text
 
 
 def echo(event, vk_api):
     text = detect_intent_texts(event.text)
-    vk_api.messages.send(
-        user_id=event.user_id,
-        message=text,
-        random_id=random.randint(1,1000)
-    )
+    if text:
+        vk_api.messages.send(
+            user_id=event.user_id,
+            message=text,
+            random_id=random.randint(1, 1000)
+        )
 
 
 if __name__ == "__main__":
