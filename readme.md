@@ -26,13 +26,13 @@ TELEGRAM_TOKEN_LOG=<бот для отправки логов>
 
 Развернуть виртуальное окружение интерпретатора
 ```sh
-python3 -m venv  
+python -m venv ./venv 
 ```
 
 Активируйте виртуальное окружение
 
 ```sh
-source pythonenv/bin/activate 
+source venv/bin/activate 
 ```
 
 Безопасно обновите pip
@@ -46,21 +46,15 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Для запуска выполните команду в консоли:
-
-```commandline
-python bot.py
-```
-
 После заполнения файла с переменными можно запускать ботов с помощью команд
-```
+```sh
 python tg_bot.py
 python vk_bot.py
 ```
 
 ## Тренировка бота
 Натренировать бота можно с помощью скрипта load_intent.py, который запускается следующей командой
-```
+```sh
 python load_intent.py --p [путь до файла json]
 ```
 Пример файла для обучения бота по [ссылке](https://dvmn.org/filer/canonical/1556745451/104/)
