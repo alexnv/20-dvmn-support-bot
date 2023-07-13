@@ -1,6 +1,11 @@
+import argparse
 import json
+import os
 
-def create_intent(intent_name, intent_value, project_id, ):
+from dotenv import load_dotenv
+
+
+def create_intent(intent_name, intent_value, project_id):
     from google.cloud import dialogflow
     intents_client = dialogflow.IntentsClient()
 
@@ -25,12 +30,22 @@ def create_intent(intent_name, intent_value, project_id, ):
 
     print("Intent created: {}".format(response))
 
+
 def main():
-    with open("questions.json", "r", encoding="utf-8") as questions_file:
+    load_dotenv()
+    dialogflow_project_id = os.environ["PROJECT_ID"]
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--p', default='questions.json', help='Path to json file')
+
+    args = parser.parse_args()
+    path = args.p
+
+    with open(path, "r", encoding="utf-8") as questions_file:
         questions = json.load(questions_file)
 
     for intent_name, intent_value in questions.items():
-        create_intent(intent_name, intent_value, "devman-support-bot-392412")
+        create_intent(intent_name, intent_value, dialogflow_project_id)
 
 
 if __name__ == '__main__':
