@@ -3,10 +3,10 @@ import json
 import os
 
 from dotenv import load_dotenv
+from google.cloud import dialogflow
 
 
 def create_intent(intent_name, intent_value, project_id):
-    from google.cloud import dialogflow
     intents_client = dialogflow.IntentsClient()
 
     parent = dialogflow.AgentsClient.agent_path(project_id)
