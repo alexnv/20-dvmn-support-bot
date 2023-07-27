@@ -14,12 +14,11 @@ logger = logging.getLogger(__name__)
 
 def generic_response(update: Update, context: CallbackContext, project_id) -> None:
     session_id = update.effective_chat.id
-    flowresponse = detect_intent_texts(project_id, session_id, update.message.text)
-    update.message.reply_text(flowresponse.query_result.fulfillment_text)
+    flow_response = detect_intent_texts(project_id, session_id, update.message.text)
+    update.message.reply_text(flow_response.query_result.fulfillment_text)
 
 
 def main() -> None:
-    # Enable logging
     logging.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
     )
@@ -30,7 +29,6 @@ def main() -> None:
     dialogflow_project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
     tg_chat_id_log = os.environ["TG_CHAT_ID"]
 
-    """Start the bot."""
     bot = Bot(token=telegram_token_log)
     logger.setLevel(logging.INFO)
     logger.addHandler(TelegramLogHandler(bot, tg_chat_id_log))
